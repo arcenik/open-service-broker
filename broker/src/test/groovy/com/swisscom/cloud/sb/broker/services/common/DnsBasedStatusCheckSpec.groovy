@@ -63,8 +63,8 @@ class DnsBasedStatusCheckSpec extends Specification {
         TEST_HOST2("dns_based_status_check_test_host2", ServiceDetailType.HOST)
 
         DnsBasedStatusCheckServiceDetailKey(String key, ServiceDetailType serviceDetailType) {
-            com_swisscom_cloud_sb_broker_util_servicedetail_AbstractServiceDetailKey__key = key
-            com_swisscom_cloud_sb_broker_util_servicedetail_AbstractServiceDetailKey__serviceDetailType = serviceDetailType
+            setKey(key)
+            setServiceDetailType(serviceDetailType)
         }
     }
 

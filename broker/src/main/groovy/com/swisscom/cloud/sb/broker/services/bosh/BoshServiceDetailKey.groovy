@@ -13,7 +13,7 @@ enum BoshServiceDetailKey implements AbstractServiceDetailKey{
     BOSH_DEPLOYMENT_ID("bosh_deployment_id", ServiceDetailType.OTHER)
 
     BoshServiceDetailKey(String key, ServiceDetailType serviceDetailType) {
-        com_swisscom_cloud_sb_broker_util_servicedetail_AbstractServiceDetailKey__key = key
-        com_swisscom_cloud_sb_broker_util_servicedetail_AbstractServiceDetailKey__serviceDetailType = serviceDetailType
+        setKey(key)
+        setServiceDetailType(serviceDetailType)
     }
 }

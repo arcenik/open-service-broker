@@ -15,7 +15,7 @@ enum OpenWhiskServiceDetailKey implements AbstractServiceDetailKey{
     OPENWHISK_SUBJECT("openwhisk_subject", ServiceDetailType.OTHER)
 
     OpenWhiskServiceDetailKey(String key, ServiceDetailType serviceDetailType) {
-        com_swisscom_cloud_sb_broker_util_servicedetail_AbstractServiceDetailKey__key = key
-        com_swisscom_cloud_sb_broker_util_servicedetail_AbstractServiceDetailKey__serviceDetailType = serviceDetailType
+        setKey(key)
+        setServiceDetailType(serviceDetailType)
     }
 }

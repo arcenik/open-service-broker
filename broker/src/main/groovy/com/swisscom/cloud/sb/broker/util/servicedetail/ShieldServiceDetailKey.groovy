@@ -10,7 +10,7 @@ enum ShieldServiceDetailKey implements AbstractServiceDetailKey{
     SHIELD_TARGET_UUID("shield_target_uuid", ServiceDetailType.OTHER)
 
     ShieldServiceDetailKey(String key, ServiceDetailType serviceDetailType) {
-        com_swisscom_cloud_sb_broker_util_servicedetail_AbstractServiceDetailKey__key = key
-        com_swisscom_cloud_sb_broker_util_servicedetail_AbstractServiceDetailKey__serviceDetailType = serviceDetailType
+        setKey(key)
+        setServiceDetailType(serviceDetailType)
     }
 }

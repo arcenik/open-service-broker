@@ -5,8 +5,16 @@ import groovy.transform.CompileStatic
 @CompileStatic
 trait AbstractServiceDetailKey {
 
-    private final String key
-    private final ServiceDetailType serviceDetailType
+    private String key
+    private ServiceDetailType serviceDetailType
+
+    void setKey(String newKey) {
+        key = newKey
+    }
+
+    void setServiceDetailType(ServiceDetailType newServiceDetailType) {
+        serviceDetailType = newServiceDetailType
+    }
 
     ServiceDetailType detailType() {
         return serviceDetailType

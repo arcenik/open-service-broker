@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '1.4.2.RELEASE'
+		springBootVersion = '1.4.5.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -22,14 +22,14 @@ repositories {
 
 
 dependencies {
-	compile('org.codehaus.groovy:groovy:2.4.7')
+	compile('org.codehaus.groovy:groovy:2.4.14')
 	compile('org.springframework.cloud:spring-cloud-cloudfoundry-service-broker:1.0.2.RELEASE')
 	compile('commons-codec:commons-codec:1.10')
-	compile('org.apache.httpcomponents:httpclient:4.5.2')
+	compile('org.apache.httpcomponents:httpclient:4.5.5')
 	compile project(':model')
 
 	testCompile ('junit:junit:4.12')
-	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.4.2.RELEASE'
+	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.4.5.RELEASE'
 	testRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 
 }

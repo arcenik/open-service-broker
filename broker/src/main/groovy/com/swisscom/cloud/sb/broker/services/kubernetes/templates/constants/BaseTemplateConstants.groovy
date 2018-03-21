@@ -10,7 +10,7 @@ enum BaseTemplateConstants implements AbstractTemplateConstants{
     PLAN_ID("PLAN_ID")
 
     private BaseTemplateConstants(String value) {
-        com_swisscom_cloud_sb_broker_services_kubernetes_templates_constants_AbstractTemplateConstants__value = value
+        setValue(value)
     }
 
 }

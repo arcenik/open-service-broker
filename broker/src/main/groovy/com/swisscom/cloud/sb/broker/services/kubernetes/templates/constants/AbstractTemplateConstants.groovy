@@ -4,7 +4,11 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 trait AbstractTemplateConstants {
-    private final String value
+    private String value
+
+    void setValue(String newValue) {
+        value = newValue
+    }
 
     String getValue() {
         return this.value
