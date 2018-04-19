@@ -21,7 +21,9 @@ import groovy.util.logging.Slf4j
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.apache.commons.lang.StringUtils
+import org.joda.time.DateTime
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.actuate.metrics.CounterService
 import org.springframework.cloud.servicebroker.model.CloudFoundryContext
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -35,6 +37,9 @@ import javax.validation.Valid
 @Slf4j
 class ProvisioningController extends BaseController {
     public static final String PARAM_ACCEPTS_INCOMPLETE = 'accepts_incomplete'
+
+    @Autowired
+    private CounterService counterService
 
     @Autowired
     private ProvisioningService provisioningService
@@ -66,6 +71,7 @@ class ProvisioningController extends BaseController {
         failIfServiceInstanceAlreadyExists(serviceInstanceGuid)
         log.trace("ProvisioningDto:${provisioningDto.toString()}")
 
+        counterService.increment("${provisioningDto.service_id}.provision")
         def request = createProvisionRequest(serviceInstanceGuid, provisioningDto, acceptsIncomplete)
         if (StringUtils.contains(request.parameters, "parentReference") &&
                 !provisioningPersistenceService.findParentServiceInstance(request.parameters)) {
@@ -138,12 +144,22 @@ class ProvisioningController extends BaseController {
     ResponseEntity<String> deprovision(@PathVariable("instanceId") String serviceInstanceGuid,
                                        @RequestParam(value = "accepts_incomplete", required = false) boolean acceptsIncomplete) {
         log.info("Deprovision request for ServiceInstanceGuid: ${serviceInstanceGuid}")
-        DeprovisionResponse response = provisioningService.deprovision(createDeprovisionRequest(serviceInstanceGuid, acceptsIncomplete))
+        def deprovisionRequest = createDeprovisionRequest(serviceInstanceGuid, acceptsIncomplete)
+        def serviceName = deprovisionRequest.serviceInstance.plan.service.name
+        def timelapse = calculateTimelapseSinceProvisioning(deprovisionRequest.serviceInstance.dateCreated)
+        log.warn("timelapse since provisioning: ${timelapse} of service ${serviceName}")
+        DeprovisionResponse response = provisioningService.deprovision(deprovisionRequest)
         return new ResponseEntity<String>("{}", response.isAsync ? HttpStatus.ACCEPTED : HttpStatus.OK)
     }
 
     private DeprovisionRequest createDeprovisionRequest(String serviceInstanceGuid, boolean acceptsIncomplete) {
         return new DeprovisionRequest(serviceInstanceGuid: serviceInstanceGuid, serviceInstance: super.getAndCheckServiceInstance(serviceInstanceGuid), acceptsIncomplete: acceptsIncomplete)
+    }
+
+    private long calculateTimelapseSinceProvisioning(Date dateCreated) {
+        long now = System.currentTimeMillis()
+        long created = dateCreated.getTime()
+        return now - created
     }
 
     @ApiOperation(value = "Get the last operation status", response = LastOperationResponseDto.class,

@@ -3,6 +3,8 @@ package com.swisscom.cloud.sb.broker
 import com.swisscom.cloud.sb.broker.config.StandAloneConfigurationInitializer
 import com.swisscom.cloud.sb.broker.config.WebContainerConfigurationInitializer
 import groovy.transform.CompileStatic
+import org.springframework.boot.actuate.health.Health
+import org.springframework.boot.actuate.health.HealthIndicator
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
@@ -12,7 +14,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer
 @SpringBootApplication(exclude = [org.springframework.cloud.servicebroker.config.ServiceBrokerAutoConfiguration.class,
         MongoAutoConfiguration.class, MongoDataAutoConfiguration.class])
 @CompileStatic
-class ServiceBroker extends SpringBootServletInitializer {
+class ServiceBroker extends SpringBootServletInitializer implements HealthIndicator {
 	static void main(String[] args) {
 		new SpringApplicationBuilder(ServiceBroker.class)
 				.initializers(new StandAloneConfigurationInitializer()).run(args)
@@ -24,4 +26,17 @@ class ServiceBroker extends SpringBootServletInitializer {
 		//Needed for war based deployment
 		application.initializers(new WebContainerConfigurationInitializer()).sources(ServiceBroker)
 	}
+
+    @Override
+    Health health() {
+        int errorCode = check(); // perform some specific health check
+        if (errorCode != 0) {
+            return Health.down().withDetail("Error Code", errorCode).build();
+        }
+        return Health.up().build();
+    }
+
+    private int check() {
+        return 0
+    }
 }
